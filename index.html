@@ -1,0 +1,622 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 5.4.6.2 (Linux)"/>
+	<meta name="created" content="2019-02-27T22:12:02"/>
+	<meta name="changed" content="2019-02-28T01:57:27"/>
+	<style type="text/css">
+		@page { margin: 0.79in }
+		p { margin-bottom: 0.1in; direction: ltr; color: #00000a; line-height: 120%; text-align: left; orphans: 2; widows: 2 }
+		p.western { font-family: "Liberation Serif", serif; font-size: 12pt; so-language: en-US }
+		p.cjk { font-family: "AR PL SungtiL GB"; font-size: 12pt; so-language: zh-CN }
+		p.ctl { font-family: "Lohit Devanagari"; font-size: 12pt; so-language: hi-IN }
+		h2 { direction: ltr; color: #00000a; text-align: left; orphans: 2; widows: 2 }
+		h2.western { font-family: "Liberation Serif", sans-serif; so-language: en-US }
+		h2.cjk { font-family: "AR PL SungtiL GB"; so-language: zh-CN }
+		h2.ctl { font-family: "Lohit Devanagari"; so-language: hi-IN }
+		h3 { direction: ltr; color: #00000a; text-align: left; orphans: 2; widows: 2 }
+		h3.western { font-family: "Liberation Serif", sans-serif; so-language: en-US }
+		h3.cjk { font-family: "AR PL SungtiL GB"; so-language: zh-CN }
+		h3.ctl { font-family: "Lohit Devanagari"; so-language: hi-IN }
+		a:link { so-language: zxx }
+	</style>
+</head>
+<body lang="en-US" text="#00000a" dir="ltr">
+<p class="western"><font size="5" style="font-size: 20pt"><b>Cassandra:
+Modélisation et création de base de données</b></font></p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<div id="TextSection" dir="ltr">
+	<p class="western"><font size="5" style="font-size: 18pt"><b>Objectifs</b></font></p>
+	<p class="western" align="left">Apprendre à modéliser un problème
+	pour l'implémenter dans une base de donnée Cassandra.</p>
+	<p class="western" align="left">Apprendre les fonctions de base
+	(insert, update, delete).</p>
+	<p class="western" align="left"><br/>
+<br/>
+
+	</p>
+	<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><a href="#Bookmark 1"><font color="#000000"><span style="text-decoration: none"><font size="4" style="font-size: 16pt"><b>Présentation
+	de Cassandra</b></font></span></font></a></span></font></p>
+	<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><a href="#Bookmark 2"><font color="#000000"><span style="text-decoration: none"><font size="4" style="font-size: 16pt"><span lang="zxx"><b>Architecture
+	de Cassandra</b></span></font></span></font></a></span></font></p>
+	<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><a href="#Bookmark 3"><font color="#000000"><span style="text-decoration: none"><font size="4" style="font-size: 16pt"><span lang="zxx"><b>Modèle
+	de données</b></span></font></span></font></a></span></font></p>
+	<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><a href="#Bookmark 4"><font color="#000000"><span style="text-decoration: none"><font size="4" style="font-size: 16pt"><span lang="zxx"><b>Le
+	langage CQL</b></span></font></span></font></a></span></font></p>
+	<p class="western"><font color="#000080"><span lang="zxx"><a href="#Bookmark 5"><font color="#000000"><span style="text-decoration: none"><font size="4" style="font-size: 16pt"><span lang="zxx"><b>Modélisation
+	rime avec dénormalisation</b></span></font></span></font></a></span></font></p>
+	<p class="western" style="margin-bottom: 0.06in"><font color="#000080"><span lang="zxx"><a href="#Bookmark 6"><font color="#000000"><span style="text-decoration: none"><font size="4" style="font-size: 16pt"><span lang="zxx"><b>Exercice</b></span></font></span></font></a></span></font></p>
+</div>
+<div id="Section1" dir="ltr">
+	<p class="western" style="margin-bottom: 0in; line-height: 100%"><br/>
+
+	</p>
+	<p class="western" style="margin-bottom: 0in; line-height: 100%"><br/>
+
+	</p>
+	<h2 class="western"></h2>
+	<h2 class="western" style="page-break-before: always"><a name="Bookmark 1"></a>
+	Présentation de Cassandra</h2>
+	<p class="western">Cassandra est une base de données NOSQL (Not
+	Only SQL) orientée colonne.</p>
+	<h3 class="western">Origine de Cassandra</h3>
+	<ul>
+		<li/>
+<p class="western">Cassandra est développé par Facebook en
+		2007 la messagerie interne. En 2008, le projet est cédé à la
+		fondation Apache et devient &quot;top-level-project&quot; à partir
+		de 2010. Cassandra est alors enrichie et de nouvelles
+		fonctionnalités y sont ajoutées.</p>
+		<li/>
+<p class="western">Cassandra est un projet open source.</p>
+		<li/>
+<p class="western">Cassandra est, entre autre, utilisée par
+		Twitter, NetFlix ou Cisco WebEx.</p>
+	</ul>
+	<h3 class="western">Remarque : Les concepts de Cassandra</h3>
+	<p class="western">Cassandra reprend les concepts de 2 bases de
+	données existantes&nbsp;: 
+	</p>
+	<ul>
+		<li/>
+<p class="western">BigTable, créé par Google, pour son
+		modèle de données orienté colonne et son mécanisme de
+		persistance sur disque</p>
+		<li/>
+<p class="western">Dynamo, créé par Amazon, pour son
+		architecture distribuée sans noeud maître.</p>
+	</ul>
+	<h3 class="western"></h3>
+	<h3 class="western">Avantages / Inconvénients</h3>
+	<p class="western"><strong>Avantages :</strong></p>
+	<ul>
+		<li/>
+<p class="western">Tolérance aux pannes (grâce aux
+		mécanismes de réplication de données)</p>
+		<li/>
+<p class="western">Décentralisé</p>
+		<li/>
+<p class="western">Élastique</p>
+		<li/>
+<p class="western">Haute disponibilité</p>
+		<li/>
+<p class="western">Open Source</p>
+	</ul>
+	<p class="western"><strong>Inconvénients :</strong></p>
+	<ul>
+		<li/>
+<p class="western">Lenteur</p>
+		<li/>
+<p class="western">Pas d'interface graphique</p>
+		<li/>
+<p class="western">Difficultés à l'utilisation</p>
+		<li/>
+<p class="western">Limitation de la taille des données</p>
+	</ul>
+	<p class="western" style="margin-bottom: 0in; line-height: 100%"><br/>
+
+	</p>
+	<h2 class="western" style="page-break-before: always"><a name="Bookmark 2"></a>
+	Architecture de Cassandra</h2>
+	<h3 class="western">Définition : Cluster</h3>
+	<p class="western">Un cluster est un regroupement de plusieurs
+	noeuds (serveur physique) qui communiquent entre eux pour la gestion
+	de données.</p>
+	<h3 class="western">Fondamental : 
+	</h3>
+	<p class="western">Cassandra est une base de donnée contenue dans
+	un cluster.</p>
+	<p class="western">Comme de nombreuse base NoSQL, les données sont
+	réparties sur plusieurs nœuds et peuvent être répliquée sur 1 à
+	N nœuds. 
+	</p>
+	<p class="western">Un utilisateur peut se connecter sur n'importe
+	quel nœud et accéder à l'ensemble des données.</p>
+	<p class="western" style="margin-bottom: 0in"><font color="#000080">
+  <img src="index_html_7f42e4606548421d.jpg" name="Image1" align="bottom" width="630" height="366" border="1"/>
+</font>
+<font color="#000080">
+	</font>
+	</p>
+	<p class="western" style="margin-bottom: 0in; line-height: 100%"><br/>
+
+	</p>
+	<h2 class="western" style="page-break-before: always"><a name="Bookmark 3"></a>
+	Modèle de données</h2>
+	<h3 class="western"></h3>
+	<h3 class="western">Définition : Colonne</h3>
+	<p class="western">La colonne est la plus petite unité de donnée
+	de Cassandra. Elle est constituée du triplet :</p>
+	<ul>
+		<li/>
+<p class="western">Nom</p>
+		<li/>
+<p class="western">Valeur&nbsp;: Maximum 2G. Elle n'est pas
+		obligatoire.</p>
+		<li/>
+<p class="western">Timestamp&nbsp;: Sauvegarde la mise à
+		jour la plus récente.</p>
+	</ul>
+	<p class="western" style="margin-left: 0.49in; text-indent: -0.2in"><br/>
+<br/>
+
+	</p>
+	<p class="western" align="left" style="margin-bottom: 0in"><a name="i0"></a>
+	C<img src="index_html_350a74f8291ae60c.png" name="Image2" align="left" width="129" height="106">
+  <br clear="left"/>
+</img>
+olonne</p>
+	<p class="western" style="margin-bottom: 0in"><br/>
+
+	</p>
+	<p class="western" align="left"><a name="i1"></a>E<img src="index_html_7f70b97c5b51c0dc.png" name="Image4" align="left" width="129" height="71">
+  <br clear="left"/>
+</img>
+xemple
+	de colonne</p>
+	<h3 class="western"></h3>
+	<h3 class="western">Remarque : 
+	</h3>
+	<p class="western">Une colonne dans cassandra n'a pas le même sens
+	que dans un SGBDR. Il s'agit là d'un attribut d'un enregistrement.</p>
+	<h3 class="western"></h3>
+	<h3 class="western">Définition : Ligne</h3>
+	<p class="western">Une ligne est un ensemble de colonnes (jusqu'à 2
+	Milliards). Elle est identifiée par une clé.</p>
+	<p class="western">C'est l'équivalent d'une ligne dans un SGBDR,
+	c'est donc un enregistrement.</p>
+	<p class="western" align="left">L<img src="index_html_2af9f30b5487824f.png" name="Image6" align="left" width="630" height="110">
+  <br clear="left"/>
+</img>
+igne</p>
+	<p class="western" align="left"><br/>
+<br/>
+
+	</p>
+	<p class="western" align="left">E<img src="index_html_7243b79bd7e41d71.png" name="Image8" align="left" width="630" height="79">
+  <br clear="left"/>
+</img>
+xemple
+	de ligne</p>
+	<h3 class="western"></h3>
+	<h3 class="western">Remarque : La notion de clé dans Cassandra</h3>
+	<p class="western">La clé d'une ligne peut être rapprochée aux
+	OID des SGBD RO. C'est grâce à elle que l'enregistrement est
+	trouvé.</p>
+	<p class="western">Les données étant réparties sur différent
+	noeuds, il faut pouvoir la récupérer rapidement. Elle est codé
+	sur 128bits et généralement représentée sous la forme de groupes
+	de caractères hexadécimaux en minuscule séparés par des tirets.
+	Cette clé d'enregistrement est de type uuid (Universal Unique
+	IDentifier).</p>
+	<p class="western">Il est possible de définir des clés primaires
+	similaires aux SGBDR. Dans ce cas, la première colonne de la clé
+	sera utilisé comme clé d'enregistrement (et convertit). Les
+	suivantes ne serviront qu'à s'assurer que l'enregistrement est
+	unique.</p>
+	<h3 class="western"></h3>
+	<h3 class="western">Définition : Column Family</h3>
+	<p class="western">Une Column Family est un regroupement de lignes.</p>
+	<p class="western" align="left" style="margin-bottom: 0in"><a name="i4"></a>
+	C<img src="index_html_cc6b13e35304c05b.png" name="Image10" align="left" width="630" height="384">
+  <br clear="left"/>
+</img>
+olumn
+	family</p>
+	<p class="western" align="left" style="margin-bottom: 0in"><br/>
+
+	</p>
+	<p class="western" align="left"><a name="i5"></a>E<img src="index_html_2dc13a291d20dd53.png" name="Image12" align="left" width="638" height="293">
+  <br clear="left"/>
+</img>
+xemple
+	de column family</p>
+	<p class="western" align="left"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Remarque : 
+	</h3>
+	<p class="western">Une Column Family est l'équivalent d'une Table
+	dans un SGBDR.</p>
+	<p class="western">On peut d'ailleurs y ajouter des &quot;métadonnées&quot;,
+	en quelque sorte des &quot;entêtes&quot; de colonnes. Néanmoins,
+	les colonnes définies ne seront pas forcément exploités lors de
+	la création de ligne.</p>
+	<p class="western">Il existe deux types de familles de colonnes</p>
+	<ul>
+		<li/>
+<p class="western">statique : les colonnes sont définies
+		lors de la création ou modification de la famille de colonnes ;</p>
+		<li/>
+<p class="western">dynamique : les colonnes sont définies
+		lors de la création ou modification d'une ligne.</p>
+	</ul>
+	<h3 class="western"></h3>
+	<h3 class="western">Définition : Keyspace</h3>
+	<p class="western">Un KeySpace est un regroupement de Column Family.
+	Il équivaut au schéma dans un SGBDR.</p>
+	<p class="western" align="left" style="margin-bottom: 0in"><a name="i6"></a>
+	K<img src="index_html_a1e8791c9e5867b6.png" name="Image14" align="left" width="574" height="630">
+  <br clear="left"/>
+</img>
+eyspace</p>
+	<p class="western" style="margin-bottom: 0in; line-height: 100%"><br/>
+
+	</p>
+	<h2 class="western" style="page-break-before: always"><a name="Bookmark 4"></a>
+	Le langage CQL</h2>
+	<h2 class="western"></h2>
+</div>
+<div id="Section2" dir="ltr">
+	<h3 class="western">Syntaxe : Create keyspace</h3>
+	<p class="western">CREATE KEYSPACE &lt;keyspace_name&gt; WITH
+	REPLICATION = { 'class' : '&lt;class de la strategie&gt;',
+	'replication_factor' : &lt;nb réplication&gt; };</p>
+	<ul>
+		<li/>
+<p class="western">class&nbsp;: Strétagie de gestion des
+		uuid</p>
+		<li/>
+<p class="western">replication_factor&nbsp;: Nombre de noeuds
+		sur lesquels les données doivent être répliquées.</p>
+	</ul>
+	<h3 class="western">Exemple : 
+	</h3>
+	<p class="western">CREATE KEYSPACE test WITH REPLICATION = { 'class'
+	: 'SimpleStrategy', 'replication_factor' : 1 };</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Syntaxe : Se positionner dans un keyspace</h3>
+	<p class="western">USE &lt;keyspace_name&gt;&nbsp;;</p>
+	<h3 class="western">Exemple : 
+	</h3>
+	<p class="western">USE test&nbsp;;</p>
+	<h3 class="western"></h3>
+	<h3 class="western">Syntaxe : Supprimer un keyspace</h3>
+	<p class="western">DROP KEYSPACE &lt;keyspace_name&gt;&nbsp;;</p>
+	<h3 class="western">Exemple : 
+	</h3>
+	<p class="western">DROP KEYSPACE test&nbsp;;</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Syntaxe : Création d'une column family avec une
+	clé primaire naturelle</h3>
+	<p class="western">CREATE TABLE &lt;table&gt; {</p>
+	<p class="western">champs1 type,</p>
+	<p class="western">champs2 type,</p>
+	<p class="western">....</p>
+	<p class="western">PRIMARY KEY(champs1)</p>
+	<p class="western">}&nbsp;;</p>
+	<h3 class="western">Exemple : 
+	</h3>
+	<p class="western">CREATE TABLE livre (</p>
+	<p class="western">isbn varchar,</p>
+	<p class="western">titre varchar,</p>
+	<p class="western">PRIMARY KEY(isbn));</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Syntaxe : Création d'une column family avec une
+	clé primaire artificielle</h3>
+	<p class="western">CREATE TABLE &lt;table&gt; {</p>
+	<p class="western">id uuid,</p>
+	<p class="western">champs2 type,</p>
+	<p class="western">....</p>
+	<p class="western">PRIMARY KEY(id)</p>
+	<p class="western">}&nbsp;;</p>
+	<h3 class="western">Exemple : 
+	</h3>
+	<p class="western">CREATE TABLE livre (</p>
+	<p class="western">id uuid,</p>
+	<p class="western">isbn varchar,</p>
+	<p class="western">titre varchar,</p>
+	<p class="western">PRIMARY KEY(id));</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Syntaxe : Ajouter une colonne</h3>
+	<p class="western">ALTER TABLE &lt;table&gt; ADD &lt;column type&gt;&nbsp;;</p>
+	<h3 class="western">Exemple : 
+	</h3>
+	<p class="western">ALTER TABLE livre ADD auteur VARCHAR ;</p>
+	<h3 class="western">Syntaxe : Supprimer une colonne</h3>
+	<p class="western">ALTER TABLE &lt;table&gt; DROP &lt;column type&gt;&nbsp;;</p>
+	<h3 class="western">Exemple : 
+	</h3>
+	<p class="western">ALTER TABLE livre DROP auteur VARCHAR ;</p>
+	<h3 class="western">Syntaxe : Supprimer une column family</h3>
+	<p class="western">DROP COLUMNFAMILY &lt;table&gt; ;</p>
+	<h3 class="western">Exemple : 
+	</h3>
+	<p class="western">DROP COLUMNFAMILY livre ; 
+	</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Syntaxe : Inserer une ligne</h3>
+	<p class="western">INSERT INTO &lt;table&gt;(&lt;colonnes....&gt;)
+	VALUES (&lt;Valeurs...&gt;);</p>
+	<h3 class="western">Attention : 
+	</h3>
+	<p class="western">La clé primaire doit obligatoirement être
+	insérée</p>
+	<h3 class="western">Exemple : Insertion avec une clé primaire
+	naturelle</h3>
+	<p class="western">INSERT INTO livre (isbn, titre) VALUES
+	('12548-5698', 'Le joueur d'échec');</p>
+	<h3 class="western">Exemple : Insertion avec une clé primaire
+	composite</h3>
+	<p class="western">INSERT INTO livre (id, isbn, titre) VALUES
+	(uuid(), '12548-5698', 'Le joueur d'échec')&nbsp;;</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<p class="western">On peut aussi utiliser des timeuuid, dont le
+	calcul est basé sur l'heure.</p>
+	<p class="western">INSERT INTO livre (id, isbn, titre) VALUES
+	(now(), '12548-5698', 'Le joueur d'échec');</p>
+	<h3 class="western">Attention : 
+	</h3>
+	<p class="western">Les opérations de delete et update doivent être
+	faites grâce à la clé primaire.</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Syntaxe : Supprimer une ligne</h3>
+	<p class="western">DELETE FROM Persons WHERE &lt;key&gt; = &lt;value&gt;;</p>
+	<h3 class="western">Exemple : 
+	</h3>
+	<p class="western">DELETE FROM livre WHERE isbn = '1258-5874';</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Syntaxe : Modifier une ligne</h3>
+	<p class="western">UPDATE livre SET titre = 'Le rouge et le noir'
+	WHERE &lt;key&gt; = &lt;value&gt;;</p>
+	<h3 class="western">Exemple : 
+	</h3>
+	<p class="western">UPDATE livre SET titre = 'Le rouge et le noir'
+	WHERE isbn = '1258-5874';</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Syntaxe : Effectuer une requete</h3>
+	<p class="western">SELECT &lt;key_column&gt; FROM &lt;table&gt;;</p>
+	<h3 class="western">Attention : 
+	</h3>
+	<p class="western">L'opération SELECT ne s'effectue que sur les
+	colonnes clés, ou bien sur les colonnes indexées.</p>
+</div>
+<div id="Section3" dir="ltr">
+	<p class="western" style="margin-bottom: 0in; line-height: 100%"><a name="tplCoSpacer"></a>
+	<br/>
+
+	</p>
+</div>
+<div id="Section4" dir="ltr">
+	<p class="western" style="margin-bottom: 0in; line-height: 100%"><br/>
+
+	</p>
+	<h2 class="western" style="page-break-before: always"><a name="Bookmark 5"></a>
+	Modélisation rime avec dénormalisation</h2>
+	<h3 class="western">Remarque : 
+	</h3>
+	<p class="western">Étant donné que Cassandra est contenue dans un
+	cluster, les jointures n'existent pas. Il faut donc dénormaliser le
+	modèle.</p>
+	<h3 class="western"></h3>
+	<h3 class="western">Méthode : Relation one to many</h3>
+	<p class="western">Voici une relation one to many (un à plusieurs)
+	dans un modèle normalisé.</p>
+	<p class="western"><img src="index_html_24b95780b4e45d0e.png" name="Image16" align="left" width="606" height="146">
+  <br clear="left"/>
+</img>
+<br/>
+<br/>
+
+	</p>
+	<p class="western">Les jointures n'étant pas possible, on
+	dénormalise la relation.</p>
+	<h3 class="western"><img src="index_html_a04a6692bb58f3e8.png" name="Image17" align="left" width="440" height="375">
+  <br clear="left"/>
+</img>
+</h3>
+	<h3 class="western">Méthode : Relation many to many</h3>
+	<p class="western">Voici un exemple de ralation many to many
+	(plusieurs à plusieurs). Un utilisateurs peux commenter plusieurs
+	livre, et un livre peut être commenté par plusieurs utilisateurs.</p>
+	<p class="western">Le but est de pouvoir retrouver tous les
+	commentaires d'un utilisateur et tous les commentaires d'un livre.</p>
+	<p class="western"><img src="index_html_760d0ed678e707a7.png" name="Image18" align="left" width="630" height="190">
+  <br clear="left"/>
+</img>
+<br/>
+<br/>
+
+	</p>
+	<p class="western">On est donc obligé de dénormaliser et de faire
+	deux tables.</p>
+	<p class="western" style="margin-bottom: 0in"><img src="index_html_934627e52403fd04.png" name="Image19" align="left" width="630" height="130">
+  <br clear="left"/>
+</img>
+<br/>
+
+	</p>
+	<h2 class="western"></h2>
+	<h2 class="western" style="page-break-before: always"><a name="Bookmark 6"></a>
+	<font size="5" style="font-size: 20pt">Exercice</font></h2>
+	<h3 class="western">Gérer des ventes</h3>
+	<p class="western">On souhaite formaliser le modèle d'un site de
+	partage de vidéo nommé CassTube, les utilisateurs possèdent un
+	login unique, ainsi que leur nom et leur prenom. Les vidéos
+	possèdent un id, un nom et une description. Un utilisateur possède
+	plusieurs vidéos, et les vidéos possèdent des commentaires de
+	plusieurs utilisateurs.</p>
+	<p class="western">Nous souhaitons rechercher une liste des vidéos,
+	ainsi que les vidéos par utilisateur. Enfin, nous chercherons aussi
+	à récupérer les commentaires d'une vidéo ou les commentaires
+	d'un utilisateurs</p>
+	<h3 class="western"></h3>
+	<h3 class="western">Question 1</h3>
+	<p class="western">Proposer une modélisation normalisée.</p>
+	<h3 class="western"></h3>
+	<h3 class="western">Question 2</h3>
+	<p class="western">Proposer maintenant la modélisation pour
+	Cassandra.</p>
+	<h3 class="western"></h3>
+	<h3 class="western">Lancer la console CQL.</h3>
+	<p class="western">Sous Windows, pour pouvoir faire des copier
+	coller, lancer la console via l'invite de commande.</p>
+	<h3 class="western"></h3>
+	<h3 class="western">Question 3</h3>
+	<p class="western">Créer un keyspace ai07</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Question 4</h3>
+	<p class="western">Créer les column family nécessaire.</p>
+	<p class="western">Pour faciliter les exercices suivant, nous allons
+	aussi créer une table user qui ne contiendra que le login, nom et
+	prénom des utilisateurs créés.</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Question 5</h3>
+	<p class="western">insérer les videos suivantes et vérifier que
+	l'insertion est correcte. 
+	</p>
+	<p class="western">id (example) - video_name - video_uploaded -
+	login</p>
+	<p class="western">1 - KeyboardCat - now - cschmidt (Chris Schmidt)</p>
+	<p class="western">2 - NyanCat - now - saraj00n (Sarah June)</p>
+	<p class="western">Ajouter ensuite l'utilisateur suivant (sans
+	vidéo)&nbsp;: MasterTroll (Jean Fabrice)</p>
+	<p class="western">Vérifier l'insertion dans la table vidéo, puis
+	recherchez les vidéos de l'utilisateur 'saraj00n'.</p>
+	<p class="western" style="margin-left: 0.5in"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Question 6</h3>
+	<p class="western">Insérer le commentaires suivants&nbsp;: 
+	</p>
+	<p class="western">1 - le 15/01/2017 à 12h00, saraj00n a écrit
+	'first' sur la vidéo 'Keyboard Cat'</p>
+	<p class="western">2 - le 15/01/2017 à 12h05, MasterTroll a écrit
+	'thats lame' sur la vidéo 'Keyboard Cat'</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Question 7</h3>
+	<p class="western">Insérer cet utilisateur&nbsp;: 
+	</p>
+	<p class="western">INSERT INTO users (client_id , nom, prenom , age)
+	VALUES ('saraj00n', 'Sarah', 'Junior');</p>
+	<p class="western">Que se passe-t-il&nbsp;?</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Question 8</h3>
+	<p class="western">L'utilisateur MasterTroll décide de dévoiler
+	son identité au grand jour, il change son nom pour PAUL</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Question 9</h3>
+	<p class="western">L'utilisateur Jean PAUL se fait banir, supprimer
+	l'utilisateur</p>
+	<p class="western"><br/>
+<br/>
+
+	</p>
+	<h3 class="western">Question 10</h3>
+	<p class="western">Supprimez la column family users.</p>
+	<h3 class="western"></h3>
+	<h3 class="western">Question 11</h3>
+	<p class="western">Supprimer le keyspace.</p>
+	<p class="western" style="margin-bottom: 0in"><br/>
+
+	</p>
+	<p class="western" style="margin-bottom: 0in"><br/>
+
+	</p>
+	<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><u><a href="Solution%20de%20lExercice.html"><font color="#000080"><span lang="zxx">Solution
+	de l'Exercice</span></font></a></u></span></font></p>
+	<p class="western" style="margin-bottom: 0in"><br/>
+
+	</p>
+	<p class="western" style="margin-bottom: 0in"><br/>
+
+	</p>
+	<p class="western" style="margin-bottom: 0in"><br/>
+
+	</p>
+	<h2 class="western" style="page-break-before: always">Sources</h2>
+</div>
+<div id="Section5" dir="ltr">
+	<ul>
+		<li/>
+<p class="western" style="margin-right: 0.63in"><font color="#000080"><span lang="zxx"><u><a href="http://mbaron.developpez.com/tutoriels/nosql/cassandra/installation-outils-administration"><font color="#000080"><span lang="zxx">http://mbaron.developpez.com/tutoriels/nosql/cassandra/installation-outils-administration</span></font></a></u></span></font></p>
+		<li/>
+<p class="western" style="margin-right: 0.63in"><font color="#000080"><span lang="zxx"><u><a href="http://fr.slideshare.net/maasg/data-analytics-with-apache-spark-and-cassandra"><font color="#000080"><span lang="zxx">http://fr.slideshare.net/maasg/data-analytics-with-apache-spark-and-cassandra</span></font></a></u></span></font></p>
+	</ul>
+	<p class="western" style="margin-left: 1.12in; margin-right: 0.63in">
+	<br/>
+<br/>
+
+	</p>
+</div>
+<div id="Section6" dir="ltr">
+	<p class="western" style="margin-bottom: 0in; line-height: 100%"><br/>
+
+	</p>
+</div>
+<div id="Section7" dir="ltr">
+	<p class="western" style="margin-bottom: 0in; line-height: 100%"><br/>
+
+	</p>
+</div>
+</body>
+</html>

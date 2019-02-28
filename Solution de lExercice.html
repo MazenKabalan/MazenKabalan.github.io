@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 5.4.6.2 (Linux)"/>
+	<meta name="created" content="2019-02-28T01:45:37"/>
+	<meta name="changed" content="2019-02-28T02:04:39"/>
+	<style type="text/css">
+		@page { margin: 0.79in }
+		p { margin-bottom: 0.1in; direction: ltr; color: #00000a; line-height: 120%; text-align: left; orphans: 0; widows: 0 }
+		p.western { font-family: "Liberation Serif", serif; font-size: 12pt; so-language: en-US }
+		p.cjk { font-family: "AR PL SungtiL GB"; font-size: 12pt; so-language: zh-CN }
+		p.ctl { font-family: "Lohit Devanagari"; font-size: 12pt; so-language: hi-IN }
+		h2 { direction: ltr; color: #00000a; text-align: left; orphans: 0; widows: 0 }
+		h2.western { font-family: "Liberation Serif", sans-serif; so-language: en-US }
+		h2.cjk { font-family: "AR PL SungtiL GB"; so-language: zh-CN }
+		h2.ctl { font-family: "Lohit Devanagari"; so-language: hi-IN }
+		h3 { direction: ltr; color: #00000a; text-align: left; orphans: 0; widows: 0 }
+		h3.western { font-family: "Liberation Serif", sans-serif; so-language: en-US }
+		h3.cjk { font-family: "AR PL SungtiL GB"; so-language: zh-CN }
+		h3.ctl { font-family: "Lohit Devanagari"; so-language: hi-IN }
+		pre { direction: ltr; color: #00000a; text-align: left; orphans: 0; widows: 0 }
+		pre.western { font-family: "Liberation Mono", serif; so-language: en-US }
+		pre.cjk { font-family: "AR PL SungtiL GB"; so-language: zh-CN }
+		pre.ctl { font-family: "Liberation Mono"; so-language: hi-IN }
+		a:link { so-language: zxx }
+	</style>
+</head>
+<body lang="en-US" text="#00000a" dir="ltr">
+<h2 class="western"><font size="5" style="font-size: 20pt">Exercice</font></h2>
+<h3 class="western">Gérer des ventes</h3>
+<p class="western">On souhaite formaliser le modèle d'un site de
+partage de vidéo nommé CassTube, les utilisateurs possèdent un
+login unique, ainsi que leur nom et leur prenom. Les vidéos
+possèdent un id, un nom et une description. Un utilisateur possède
+plusieurs vidéos, et les vidéos possèdent des commentaires de
+plusieurs utilisateurs.</p>
+<p class="western">Nous souhaitons rechercher une liste des vidéos,
+ainsi que les vidéos par utilisateur. Enfin, nous chercherons aussi
+à récupérer les commentaires d'une vidéo ou les commentaires d'un
+utilisateurs</p>
+<h3 class="western">Question 1</h3>
+<p class="western">Proposer une modélisation normalisée.</p>
+<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><u><a href="https://stph.scenari-community.org/contribs/nos/Cassandra1/co/exercice1.html"><font color="#000080"><span lang="zxx">Solution</span></font></a></u></span></font></p>
+<p class="western"><img src="Solution%20de%20lExercice_html_90f3241122299007.png" name="Image20" align="left" width="630" height="265">
+  <br clear="left"/>
+</img>
+<br/>
+<br/>
+
+</p>
+<h3 class="western">Question 2</h3>
+<p class="western">Proposer maintenant la modélisation pour
+Cassandra.</p>
+<ul>
+	<li/>
+<p class="western">Il y a une relation one to many et une
+	relation many to many.</p>
+	<li/>
+<p class="western">On ne souhaite pas faire des requêtes sur
+	les utilisateurs.</p>
+</ul>
+<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><u><a href="https://stph.scenari-community.org/contribs/nos/Cassandra1/co/exercice1.html"><font color="#000080"><span lang="zxx">Solution</span></font></a></u></span></font></p>
+<p class="western"><img src="Solution%20de%20lExercice_html_70370f0b3691e2f5.png" name="Image21" align="left" width="630" height="185">
+  <br clear="left"/>
+</img>
+<br/>
+<br/>
+
+</p>
+<h3 class="western">Lancer la console CQL.</h3>
+<p class="western">Sous Windows, pour pouvoir faire des copier
+coller, lancer la console via l'invite de commande.</p>
+<h3 class="western">Question 3</h3>
+<p class="western">Créer un keyspace ai07</p>
+<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><u><a href="https://stph.scenari-community.org/contribs/nos/Cassandra1/co/exercice1.html"><font color="#000080"><span lang="zxx">Solution</span></font></a></u></span></font></p>
+<pre class="western" style="margin-bottom: 0.2in">CREATE KEYSPACE ai07 WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };</pre><h3 class="western">
+Question 4</h3>
+<p class="western">Créer les column family nécessaire.</p>
+<p class="western">Pour faciliter les exercices suivant, nous allons
+aussi créer une table user qui ne contiendra que le login, nom et
+prénom des utilisateurs créés.</p>
+<ul>
+	<li/>
+<p class="western">Ne pas oublier de se placer dans le
+	keyspace ai07</p>
+	<li/>
+<p class="western">USE AI07;</p>
+	<li/>
+<p class="western">CREATE TABLE &lt;table&gt; {</p>
+</ul>
+<p class="western">champs1 type,</p>
+<p class="western">champs2 type,</p>
+<p class="western">....</p>
+<p class="western">PRIMARY KEY(champs1)</p>
+<p class="western">} ;</p>
+<p class="western"><font color="#000080"><span lang="zxx"><u><a href="https://stph.scenari-community.org/contribs/nos/Cassandra1/co/exercice1.html"><font color="#000080"><span lang="zxx">Solution</span></font></a></u></span></font></p>
+<p class="western"><b>videos</b></p>
+<pre class="western">CREATE TABLE videos (
+  video_id uuid,
+  video_name varchar,
+  video_uploaded timestamp,
+  user_login varchar,
+  PRIMARY KEY(video_id));
+
+<b>videos_by_user</b>
+
+CREATE TABLE user_videos_index (
+  login varchar,
+  video_id uuid,
+  video_name varchar,
+  PRIMARY KEY(login, video_id));
+
+<b>comments_by_videos</b>
+
+CREATE TABLE comments_by_video (
+  video_id uuid,
+  user_login varchar,
+  comment_dat timestamp,
+  comment varchar,
+  PRIMARY KEY(video_id, user_login));
+
+<b>comments_by_user</b>
+
+CREATE TABLE comments_by_user (
+  user_login varchar,
+  video_id uuid,
+  comment_dat timestamp,
+  comment varchar,
+  PRIMARY KEY(user_login, video_id));
+
+<b>user</b>
+
+CREATE TABLE users (
+login varchar,
+firstname varchar,
+lastname varchar,
+PRIMARY KEY(login));</pre><h3 class="western">
+Question 5</h3>
+<p class="western">insérer les videos suivantes et vérifier que
+l'insertion est correcte. 
+</p>
+<p class="western">id (example) - video_name - video_uploaded - login</p>
+<p class="western">1 - KeyboardCat - now - cschmidt (Chris Schmidt)</p>
+<p class="western">2 - NyanCat - now - saraj00n (Sarah June)</p>
+<p class="western">Ajouter ensuite l'utilisateur suivant (sans
+vidéo)&nbsp;: MasterTroll (Jean Fabrice)</p>
+<p class="western">Vérifier l'insertion dans la table vidéo, puis
+recherchez les vidéos de l'utilisateur 'saraj00n'.</p>
+<p class="western" style="margin-left: 0.5in"><br/>
+<br/>
+
+</p>
+<ul>
+	<li/>
+<p class="western">INSERT INTO &lt;table&gt;(&lt;colonnes....&gt;)
+	VALUES (&lt;Valeurs...&gt;);</p>
+	<li/>
+<p class="western">N'oubliez pas d'insérer les vidéos dans
+	la table d'index&nbsp;!</p>
+	<li/>
+<p class="western">Pour générer un UUID, utilisez uuid()</p>
+</ul>
+<p class="western">Pour récupérer la date actuelle, utilisez
+dateof(now))</p>
+<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><u><a href="https://stph.scenari-community.org/contribs/nos/Cassandra1/co/exercice1.html"><font color="#000080"><span lang="zxx">Solution</span></font></a></u></span></font></p>
+<pre class="western">INSERT INTO users(login, firstname, lastname) VALUES ('cschmidt', 'chris', 'SCHMIDT');
+
+INSERT INTO users(login, firstname, lastname) VALUES ('saraj00n', 'Sarah', 'JUNE');
+
+INSERT INTO users(login, firstname, lastname) VALUES ('MasterTroll', 'Jean', 'FABRICE');
+
+INSERT INTO videos (video_id, video_name, video_uploaded, user_login) VALUES (uuid(),'Keyboard Cat', dateof(now()), 'cshmidt');
+
+INSERT INTO user_videos_index (login, video_id, video_name) VALUES ('cschmidt', the generated uuid, 'Keyboard Cat');
+
+INSERT INTO videos (video_id, video_name, video_uploaded, user_login) VALUES (uuid(),'nyan cat', dateof(now()), 'saraj00n');
+
+INSERT INTO user_videos_index (login, video_id, video_name) VALUES ('saraj00n', the generated uuid, 'nyan cat');
+
+SELECT * FROM videos;
+
+SELECT video_name FROM user_videos_index WHERE login='saraj00n';</pre><h3 class="western">
+Question 6</h3>
+<p class="western">Insérer le commentaires suivants&nbsp;: 
+</p>
+<p class="western">1 - le 15/01/2017 à 12h00, saraj00n a écrit
+'first' sur la vidéo 'Keyboard Cat'</p>
+<p class="western">2 - le 15/01/2017 à 12h05, MasterTroll a écrit
+'thats lame' sur la vidéo 'Keyboard Cat'</p>
+<p class="western"><br/>
+<br/>
+
+</p>
+<p class="western">Utilisez le format de date epoch.</p>
+<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><u><a href="https://stph.scenari-community.org/contribs/nos/Cassandra1/co/exercice1.html"><font color="#000080"><span lang="zxx">Solution</span></font></a></u></span></font></p>
+<pre class="western">INSERT INTO comments_by_user (user_login, video_id, comment_dat, comment) VALUES (saraj00n, generated uuid, '1484481600', 'first');
+
+INSERT INTO comments_by_videos (video_id, user_login, comment_dat, comment) VALUES (generated uuid, saraj00n, '1484481600', 'first');
+
+INSERT INTO comments_by_user (user_login, video_id, comment_dat, comment) VALUES (MasterTroll, generated uuid, '1484481900', 'thats lame');
+
+INSERT INTO comments_by_videos (video_id, user_login, comment_dat, comment) VALUES (generated uuid, 'MasterTroll', 1484481900, 'thats lame');
+
+SELECT * FROM comments_by_user;
+
+SELECT * FROM comments_by_video;</pre><h3 class="western">
+Question 7</h3>
+<p class="western">Insérer cet utilisateur&nbsp;: 
+</p>
+<p class="western">INSERT INTO users (client_id , nom, prenom , age)
+VALUES ('saraj00n', 'Sarah', 'Junior');</p>
+<p class="western">Que se passe-t-il&nbsp;?</p>
+<p class="western"><font color="#000080"><span lang="zxx"><u><a href="https://stph.scenari-community.org/contribs/nos/Cassandra1/co/exercice1.html"><font color="#000080"><span lang="zxx">Solution</span></font></a></u></span></font></p>
+<p class="western">L'utilisateur saraj00n existait déjà (Sarah
+Junior). L'insert ne renvoie pas d'erreur mais fait un update de la
+ligne.</p>
+<h3 class="western">Question 8</h3>
+<p class="western">L'utilisateur MasterTroll décide de dévoiler son
+identité au grand jour, il change son nom pour PAUL</p>
+<ul>
+	<li/>
+<p class="western">Il faut faire un update</p>
+	<li/>
+<p class="western">UPDATE livre SET titre = 'Le rouge et le
+	noir' WHERE &lt;key&gt; = &lt;value&gt;;</p>
+</ul>
+<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><u><a href="https://stph.scenari-community.org/contribs/nos/Cassandra1/co/exercice1.html"><font color="#000080"><span lang="zxx">Solution</span></font></a></u></span></font></p>
+<p class="western">UPDATE users SET lastname='PAUL' WHERE
+login='MasterTroll';</p>
+<p class="western">SELECT * FROM users;</p>
+<h3 class="western">Question 9</h3>
+<p class="western">L'utilisateur Jean PAUL se fait banir, supprimer
+l'utilisateur</p>
+<ul>
+	<li/>
+<p class="western">On doit utiliser la clé primaire</p>
+	<li/>
+<p class="western">DELETE FROM Persons WHERE &lt;key&gt; =
+	&lt;value&gt;;</p>
+	<li/>
+<p class="western">C'est l'utilisateur MasterTroll</p>
+</ul>
+<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><u><a href="https://stph.scenari-community.org/contribs/nos/Cassandra1/co/exercice1.html"><font color="#000080"><span lang="zxx">Solution</span></font></a></u></span></font></p>
+<pre class="western" style="margin-bottom: 0.2in">DELETE FROM users WHERE login = 'MasterTroll';</pre><h3 class="western">
+Question 10</h3>
+<p class="western">Supprimez la column family users.</p>
+<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><u><a href="https://stph.scenari-community.org/contribs/nos/Cassandra1/co/exercice1.html"><font color="#000080"><span lang="zxx">Solution</span></font></a></u></span></font></p>
+<pre class="western" style="margin-bottom: 0.2in">drop table users;</pre><h3 class="western">
+Question 11</h3>
+<p class="western">Supprimer le keyspace.</p>
+<p class="western" style="margin-bottom: 0in"><font color="#000080"><span lang="zxx"><u><a href="https://stph.scenari-community.org/contribs/nos/Cassandra1/co/exercice1.html"><font color="#000080"><span lang="zxx">Solution</span></font></a></u></span></font></p>
+<pre class="western" style="margin-bottom: 0.2in">DROP KEYSPACE ai07;</pre><p class="western" style="margin-bottom: 0in; line-height: 100%">
+<br/>
+
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><font color="#000080"><span lang="zxx"><u><a href="index.html#Bookmark%206"><font size="3" style="font-size: 12pt">Retourner
+a la page principale</font></a></u></span></font></p>
+</body>
+</html>
